@@ -48,7 +48,7 @@ class InputFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        listener = context as Listener?;
+        listener = context as Listener?
     }
 
     override fun onDetach() {
