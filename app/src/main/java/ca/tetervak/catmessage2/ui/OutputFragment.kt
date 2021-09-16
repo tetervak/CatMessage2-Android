@@ -81,4 +81,9 @@ class OutputFragment : Fragment() {
         listener = null
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }
