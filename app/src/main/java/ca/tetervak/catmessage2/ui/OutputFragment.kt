@@ -18,16 +18,7 @@ class OutputFragment : Fragment() {
     private var listener: Listener? = null
 
     companion object{
-        private const val ENVELOPE = "Envelope"
-
-        @JvmStatic
-        fun newInstance(envelope: Envelope?): OutputFragment{
-            val fragment = OutputFragment()
-            val arguments = Bundle()
-            arguments.putSerializable(ENVELOPE, envelope)
-            fragment.arguments = arguments
-            return fragment
-        }
+        const val ENVELOPE = "Envelope"
     }
 
     private var _binding: FragmentOutputBinding? = null
