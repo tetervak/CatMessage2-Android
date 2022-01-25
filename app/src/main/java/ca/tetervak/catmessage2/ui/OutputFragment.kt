@@ -1,27 +1,23 @@
 package ca.tetervak.catmessage2.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import ca.tetervak.catmessage2.MainActivity
 import ca.tetervak.catmessage2.R
 import ca.tetervak.catmessage2.databinding.FragmentOutputBinding
 import ca.tetervak.catmessage2.model.Envelope
 
 class OutputFragment : Fragment() {
 
-    interface Listener{
-        fun showInput()
-    }
-    private var listener: Listener? = null
-
-    companion object{
+    companion object {
         private const val ENVELOPE = "Envelope"
 
         @JvmStatic
-        fun newInstance(envelope: Envelope?): OutputFragment{
+        fun newInstance(envelope: Envelope?): OutputFragment {
             val fragment = OutputFragment()
             val arguments = Bundle()
             arguments.putSerializable(ENVELOPE, envelope)
@@ -49,7 +45,11 @@ class OutputFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentOutputBinding.inflate(inflater, container, false)
 
-        binding.backButton.setOnClickListener { listener?.showInput() }
+        binding.backButton.setOnClickListener {
+            parentFragmentManager.popBackStack(
+                MainActivity.INPUT_TO_OUTPUT, FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+        }
 
         showEnvelope()
 
@@ -57,7 +57,7 @@ class OutputFragment : Fragment() {
     }
 
 
-    private fun showEnvelope(){
+    private fun showEnvelope() {
 
         envelope?.apply {
             binding.isUrgentOutput.text =
@@ -68,16 +68,6 @@ class OutputFragment : Fragment() {
                 }
             binding.messageText.text = textMessage
         }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as Listener
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
     }
 
     override fun onDestroyView() {
