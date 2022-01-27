@@ -12,7 +12,7 @@ import ca.tetervak.catmessage2.ui.OutputFragment
 import ca.tetervak.catmessage2.databinding.ActivityMainBinding
 import ca.tetervak.catmessage2.ui.OutputFragment.Companion.ENVELOPE
 
-class MainActivity : AppCompatActivity(), InputFragment.Listener, OutputFragment.Listener {
+class MainActivity : AppCompatActivity() {
     companion object{
         const val INPUT_TO_OUTPUT = "Input_to_Output"
     }
@@ -32,17 +32,4 @@ class MainActivity : AppCompatActivity(), InputFragment.Listener, OutputFragment
         }
     }
 
-    override fun showOutput(envelope: Envelope) {
-        val arguments = bundleOf(ENVELOPE to envelope)
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            replace(R.id.fragment_container, OutputFragment::class.java, arguments)
-            addToBackStack(INPUT_TO_OUTPUT)
-        }
-    }
-
-    override fun showInput(){
-        supportFragmentManager.popBackStack(
-            INPUT_TO_OUTPUT, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-    }
 }
