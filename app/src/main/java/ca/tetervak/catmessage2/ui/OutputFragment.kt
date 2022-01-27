@@ -13,30 +13,12 @@ import ca.tetervak.catmessage2.model.Envelope
 
 class OutputFragment : Fragment() {
 
-    companion object {
-        private const val ENVELOPE = "Envelope"
-
-        @JvmStatic
-        fun newInstance(envelope: Envelope?): OutputFragment {
-            val fragment = OutputFragment()
-            val arguments = Bundle()
-            arguments.putSerializable(ENVELOPE, envelope)
-            fragment.arguments = arguments
-            return fragment
-        }
+    companion object{
+        const val ENVELOPE = "Envelope"
     }
 
     private var _binding: FragmentOutputBinding? = null
     private val binding get() = _binding!!
-
-    private var envelope: Envelope? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            envelope = it.getSerializable(ENVELOPE) as Envelope?
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,29 +27,32 @@ class OutputFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentOutputBinding.inflate(inflater, container, false)
 
-        binding.backButton.setOnClickListener {
-            parentFragmentManager.popBackStack(
-                MainActivity.INPUT_TO_OUTPUT, FragmentManager.POP_BACK_STACK_INCLUSIVE
-            )
+        val envelope = arguments?.getSerializable(ENVELOPE) as Envelope?
+        if(envelope is Envelope) {
+            showEnvelope(envelope)
         }
 
-        showEnvelope()
+        binding.backButton.setOnClickListener {
+            showInput()
+        }
 
         return binding.root
     }
 
 
-    private fun showEnvelope() {
+    private fun showEnvelope(envelope: Envelope){
+        binding.isUrgentOutput.text =
+            if (envelope.isUrgent) {
+                getString(R.string.urgent)
+            } else {
+                getString(R.string.not_urgent)
+            }
+        binding.messageText.text = envelope.textMessage
+    }
 
-        envelope?.apply {
-            binding.isUrgentOutput.text =
-                if (isUrgent) {
-                    getString(R.string.urgent)
-                } else {
-                    getString(R.string.not_urgent)
-                }
-            binding.messageText.text = textMessage
-        }
+    private fun showInput(){
+        parentFragmentManager.popBackStack(
+            MainActivity.INPUT_TO_OUTPUT, FragmentManager.POP_BACK_STACK_INCLUSIVE)
     }
 
     override fun onDestroyView() {
